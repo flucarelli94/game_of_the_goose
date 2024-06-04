@@ -6,6 +6,13 @@ np.random.seed(int(time.time()))
 
 WINNING_STATUS = 63
 
+class Player:
+    def __init__(self, id, name):
+        self.id = id
+        self.status = 0
+        self.name = name
+        self.in_hotel = False
+
 def update_status(curr_status: int) -> int:
     """Update the player status after rolling the dice
 
@@ -62,19 +69,19 @@ def start_game(*, players: int = 0)-> tuple[int, list[int]]:
         players status. The player index starts from 1
     """
     player_names =["Fra", "Robin", "Chiara", "Michele", "Bobby", "Fede"]
-    players_status = [0] * players
+    players_list = [Player(i+1, player_names[i]) for i in range(players)]
 
     while True:
-        for ith_player, _ in enumerate(players_status):
-            print(f"It's {player_names[ith_player]} turn")
-            new_status = update_status(players_status[ith_player])
-            players_status[ith_player] = new_status
+        for player in players_list:
+            print(f"It's {player.name} turn")
+            new_status = update_status(player.status)
+            player.status = new_status
 
-            print(f"\tReached position {players_status[ith_player]}")
+            print(f"\tReached position {player.status}")
 
-            if players_status[ith_player]== WINNING_STATUS:
-                print(f"{player_names[ith_player]} wins!")
-                return ith_player + 1, players_status
+            if player.status == WINNING_STATUS:
+                print(f"{player.name} wins!")
+                return player.id, players_list
             
 
 if __name__ == "__main__":
