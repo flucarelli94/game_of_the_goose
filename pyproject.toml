@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "game_of_the_goose"
+description = "Game of the goose."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["pytest==8.2.1"]
+version = "0.0.1"
