@@ -13,30 +13,20 @@ class Player:
         self.name = name
         self.in_hotel = False
 
-def update_status(curr_status: int) -> int:
-    """Update the player status after rolling the dice
+    def update_status(self):
+        """Update the player status after rolling the dice, i.e.
+            the new player position as an integer from 1 to 63
+        """
+        dice_rolls = np.random.randint(low=1, high=6, size=2)
+        new_status = self.status + dice_rolls.sum()
 
-    Parameters
-    ----------
-    curr_status : int
-        Current status of the player, i.e. its position as an integer
-        from 1 to 63 
+        new_status = check_jumping(new_status)
+        
+        if new_status>WINNING_STATUS:
+            new_status = 2*WINNING_STATUS-new_status # If exceeding max state, step back by difference
 
-    Returns
-    -------
-    int
-        Updated status of the player after rolling the dice, i.e.
-        the new player position as an integer from 1 to 63
-    """
-    dice_rolls = np.random.randint(low=1, high=6, size=2)
-    new_status = curr_status + dice_rolls.sum()
-
-    new_status = check_jumping(new_status)
-    
-    if new_status>WINNING_STATUS:
-        new_status = 2*WINNING_STATUS-new_status # If exceeding max state, step back by difference
-    
-    return new_status
+        self.status = new_status
+# def check_hotel(curr_status: int) -> 
 
 def check_jumping(curr_status: int) -> int:
     if curr_status == 6:
@@ -74,8 +64,7 @@ def start_game(*, players: int = 0)-> tuple[int, list[int]]:
     while True:
         for player in players_list:
             print(f"It's {player.name} turn")
-            new_status = update_status(player.status)
-            player.status = new_status
+            player.update_status()
 
             print(f"\tReached position {player.status}")
 
